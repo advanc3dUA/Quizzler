@@ -1,20 +1,14 @@
 //
-//  ViewController.swift
+//  QuizBrain.swift
 //  Quizzler-iOS13
 //
-//  Created by Angela Yu on 12/07/2019.
-//  Copyright © 2019 The App Brewery. All rights reserved.
+//  Created by advanc3d on 20.10.2022.
+//  Copyright © 2022 The App Brewery. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class ViewController: UIViewController {
-    
-    @IBOutlet weak var trueButton: UIButton!
-    @IBOutlet weak var falseButton: UIButton!
-    @IBOutlet weak var questionLabel: UILabel!
-    @IBOutlet weak var progressBar: UIProgressView!
-    
+struct QuizBrain {
     let quiz = [Question(q: "A slug's blood is green.", a: true),
                 Question(q: "Approximately one quarter of human bones are in the feet.", a: true),
                 Question(q: "The total surface area of two human lungs is approximately 70 square metres.", a: true),
@@ -30,39 +24,34 @@ class ViewController: UIViewController {
 
     ]
     var questionNumber = 0
+    var score = 0
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        updateUI()
-    }
-
-    @IBAction func actionButtonPressed(_ sender: UIButton) {
-        if sender.currentTitle?.lowercased() == String(quiz[questionNumber].answer) {
-            buttonAnimation(for: sender, color: .green)
-        } else {
-            buttonAnimation(for: sender, color: .red)
+    mutating func checkAnswer(_ userAnswer: String) -> Bool {
+        if userAnswer.lowercased() == String(self.quiz[questionNumber].answer) {
+            score += 1
+            return true
         }
-        
+        return false
+    }
+    
+    mutating func nextQuestion() {
         if questionNumber < quiz.count - 1 {
             questionNumber += 1
-            updateUI()
         } else {
             questionNumber = 0
-            updateUI()
+            score = 0
         }
     }
     
-    private func updateUI() {
-        questionLabel.text = quiz[questionNumber].text
-        progressBar.progress = Float(questionNumber + 1) / Float(quiz.count)
+    func getQuestionText() -> String {
+        return self.quiz[questionNumber].text
     }
     
-    private func buttonAnimation(for sender: UIButton, color: UIColor) {
-        UIView.animate(withDuration: 0.5, delay: 0) {
-            sender.backgroundColor = color
-        } completion: { finished in
-            sender.backgroundColor = .clear
-        }
+    func getProgress() -> Float {
+        return Float(self.questionNumber + 1) / Float(self.quiz.count)
+    }
+    
+    mutating func getScore() -> Int {
+        return score
     }
 }
-
