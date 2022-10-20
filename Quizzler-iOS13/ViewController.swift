@@ -10,11 +10,28 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var trueButton: UIButton!
+    @IBOutlet weak var falseButton: UIButton!
+    @IBOutlet weak var questionLabel: UILabel!
+    
+    let quiz = ["1 + 2 = 3",
+                "2 + 3 = 5",
+                "5 - 1 = 3"
+    ]
+    var questionNumber = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        updateUI()
     }
 
-
+    @IBAction func actionButtonPressed(_ sender: UIButton) {
+        questionNumber += 1
+        updateUI()
+    }
+    
+    private func updateUI() {
+        questionLabel.text = quiz[questionNumber]
+    }
 }
 
